@@ -12,7 +12,7 @@ const pgDb = require('../../database/pgDb');
 const mongoDb = require('../../database/mongoDb');
 
 module.exports = new GraphQLObjectType({
-  name: "MeType",
+  name: "UserType",
   fields: {
     id: {type: GraphQLID},
     email: { type: GraphQLNonNull(GraphQLString)},
