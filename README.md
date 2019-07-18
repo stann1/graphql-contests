@@ -1,3 +1,3 @@
-Clone repo then checkout a branch to start
+## GraphQL playground - using node, postgres, mongo and docker
 
-For questions: [slack.jscomplete.com](http://slack.jscomplete.com/)
+using as basis the pluralsight GraphQL course by Samer Buna

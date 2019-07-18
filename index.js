@@ -1,4 +1,4 @@
-const { nodeEnv } = require('./lib/util');
+const { nodeEnv } = require('./config/app');
 const debug = require('debug')("app:startup");
 
 debug(`Running in ${nodeEnv} mode...`);

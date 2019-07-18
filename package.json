@@ -1,8 +1,8 @@
 {
-  "name": "name-contests-api",
+  "name": "graphql-contests-api",
   "version": "1.0.0",
-  "description": "Name contests API",
-  "author": "Samer Buna",
+  "description": "GraphQL contests API",
+  "author": "Stanislav Stoychev",
   "license": "ISC",
   "scripts": {
     "start": "PORT=5000 DEBUG=app:* node index",

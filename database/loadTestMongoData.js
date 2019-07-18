@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 const assert = require('assert');
-const { nodeEnv } = require('../lib/util');
+const { nodeEnv } = require('../config/app');
 const mongoConfig = require('../config/mongo')[nodeEnv];
 
 MongoClient.connect(mongoConfig.url, {useNewUrlParser:true}, (err, client) => {
@@ -21,6 +21,7 @@ MongoClient.connect(mongoConfig.url, {useNewUrlParser:true}, (err, client) => {
       votesCount: 4
     }
   ]).then(response => {
+    // eslint-disable-next-line no-console
     console.log(response);
     client.close();
   });

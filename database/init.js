@@ -1,8 +1,8 @@
-const { nodeEnv } = require('../lib/util');
+const { nodeEnv } = require('../config/app');
 const dbDebug = require('debug')('app:db');
 
 const initMongo = () => {
-  const { MongoClient } = require('mongodb');
+  const { MongoClient, Logger } = require('mongodb');
   const mongoConfig = require('../config/mongo')[nodeEnv];
 
   return new Promise((resolve, reject) => {
@@ -11,6 +11,8 @@ const initMongo = () => {
         reject(err);
       }
 
+      Logger.setLevel('info');
+      
       resolve(client);
     });
   })
@@ -42,7 +44,7 @@ const init = async () => {
 
   const mongoClient = await initMongo();
   dbDebug("Mongo client connected.");
-  db.mongo = mongoClient;
+  db.mongo = mongoClient.db();
 
   return db;
 }
