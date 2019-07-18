@@ -1,0 +1,27 @@
+version: "3.3"
+services:
+  node:
+    image: "node:lts"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+    volumes:
+      - ./:/home/node/app
+    ports:
+      - 5000:5000
+    command: "npm start"
+    depends_on:
+      - mongo
+      - postgres
+  mongo:
+    image: mongo
+    restart: always
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - 5434:5432
