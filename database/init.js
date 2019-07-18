@@ -1,5 +1,6 @@
 const { nodeEnv } = require('../config/app');
 const dbDebug = require('debug')('app:db');
+const queryDebug = require('debug')('app:pgquery');
 
 const initMongo = () => {
   const { MongoClient, Logger } = require('mongodb');
@@ -11,7 +12,8 @@ const initMongo = () => {
         reject(err);
       }
 
-      Logger.setLevel('info');
+      Logger.setLevel('debug');
+      Logger.filter('class', ["Server"]);
       
       resolve(client);
     });
@@ -23,12 +25,23 @@ const initPg = async () => {
   const pgConfig = require('../config/pg')[nodeEnv];
 
   const pool = new PgPool(pgConfig);
-  pool.on('acquire', () => {
-    dbDebug("Acquired new client from pg pool");
+  
+  pool.on('error', (err) => {
+    dbDebug("Error in the pool: " + err);
   });
-  pool.on('remove', () => {
-    dbDebug("Removed new client from pg pool");
-  });
+  pool.on('connect', client => {
+    dbDebug('Requested new client from pool');
+    client.on('end', (msg) => {
+      dbDebug("Client closing: " + msg);
+    })
+
+    const original = client.query;
+
+    client.query = (...args) => {
+      queryDebug(`QUERY: ${args[0]}, ${args[1]}`);
+      return original.apply(client, args);
+    }
+  })
   return pool;
 }
 
