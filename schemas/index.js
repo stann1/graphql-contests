@@ -4,14 +4,14 @@ const {
   GraphQLObjectType,
   GraphQLNonNull
 } = require('graphql');
-const UserType = require('./types/user');
+const User = require('./types/user');
 const pgDb = require('../database/pgDb');
 
 const RootQueryType = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
     me: {
-      type: UserType,
+      type: User,
       description: "Current user identified by api key",
       args: {
         key: {type: GraphQLNonNull(GraphQLString)}

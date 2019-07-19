@@ -7,11 +7,12 @@ const {
   GraphQLList
 } = require('graphql');
 
-const NameType = require('./name');
+const Name = require('./name');
+const Venue = require('./venue');
 const pgDb = require('../../database/pgDb');
 
-const ContestStatusType = new GraphQLEnumType({
-  name: "ContestStatusType",
+const ContestStatus = new GraphQLEnumType({
+  name: "ContestStatus",
   values: {
     DRAFT: { value: 'draft' },
     PUBLISHED: { value: 'published' },
@@ -20,18 +21,24 @@ const ContestStatusType = new GraphQLEnumType({
 })
 
 module.exports = new GraphQLObjectType({
-  name: "ContestType",
+  name: "Contest",
   fields: {
     id: {type: GraphQLID},
     code: { type: new GraphQLNonNull(GraphQLString)},
     title: { type: new GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLString },
-    status: { type: new GraphQLNonNull(ContestStatusType) },
+    status: { type: new GraphQLNonNull(ContestStatus) },
     createdAt: { type: new GraphQLNonNull(GraphQLString) },
     names: {
-      type: new GraphQLList(NameType),
+      type: new GraphQLList(Name),
       resolve(obj, args, {postgres}){
         return pgDb(postgres).getNames(obj);
+      }
+    },
+    venue: {
+      type: Venue,
+      resolve(obj, args, {postgres}){
+        return pgDb(postgres).getVenueById(obj.venueId)
       }
     }
   }

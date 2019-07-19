@@ -17,6 +17,11 @@ module.exports = pgPool => {
         return humps.camelizeKeys(result.rows);
       });
     },
+    getVenueById(id){
+      return pgPool.query(`select * from venues where id = $1`, [id]).then((result) => {
+        return humps.camelizeKeys(result.rows[0]);
+      });
+    },
     getUserById(id){
       return pgPool.query(`select * from users where id = $1`, [id]).then((result) => {
         return humps.camelizeKeys(result.rows[0]);

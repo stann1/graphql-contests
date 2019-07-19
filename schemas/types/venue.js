@@ -8,21 +8,19 @@ const {
 const pgDb = require('../../database/pgDb');
 
 module.exports = new GraphQLObjectType({
-  name: "Name",
+  name: "Venue",
   fields: () => {
     const User = require('./user');
-
     return {
       id: { type: GraphQLID },
-      label: { type: new GraphQLNonNull(GraphQLString) },
-      description: { type: GraphQLString },
-      createdAt: { type: new GraphQLNonNull(GraphQLString) },
-      createdBy: {
+      name: { type: new GraphQLNonNull(GraphQLString) },
+      moderator: {
         type: new GraphQLNonNull(User),
         resolve(obj, args, { postgres }) {
-          return pgDb(postgres).getUserById(obj.createdBy);
+          return pgDb(postgres).getUserById(obj.modifiedBy);
         }
-      }
+      },
+      modifiedOn: { type: new GraphQLNonNull(GraphQLString) }
     }
   }
 });

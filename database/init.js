@@ -13,9 +13,9 @@ const initMongo = () => {
       }
 
       Logger.setLevel('debug');
-      Logger.filter('class', ["Server"]);
+      Logger.filter('class', ["Db"]);
       
-      resolve(client);
+      resolve(client.db());
     });
   })
 }
@@ -30,11 +30,6 @@ const initPg = async () => {
     dbDebug("Error in the pool: " + err);
   });
   pool.on('connect', client => {
-    dbDebug('Requested new client from pool');
-    client.on('end', (msg) => {
-      dbDebug("Client closing: " + msg);
-    })
-
     const original = client.query;
 
     client.query = (...args) => {
@@ -51,13 +46,13 @@ const init = async () => {
     mongo: null
   }
   
-  const postgreClient = await initPg();
-  db.postgres = postgreClient;
+  const postgrePool = await initPg();
+  db.postgres = postgrePool;
   dbDebug("Postgres client connected.");
 
-  const mongoClient = await initMongo();
+  const mongoPool = await initMongo();
   dbDebug("Mongo client connected.");
-  db.mongo = mongoClient.db();
+  db.mongo = mongoPool;
 
   return db;
 }

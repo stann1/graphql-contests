@@ -73,3 +73,26 @@ VALUES
 (3,FALSE,2),
 (4,TRUE,1),
 (4,TRUE,2);
+
+-- modify db ----------------
+
+create table venues (
+  id serial primary key,
+  name varchar(255) not null,
+  rating smallint,
+  modified_on timestamp not null default current_timestamp,
+  modified_by integer references users not null
+);
+
+alter table contests
+add venue_id integer references venues;
+
+INSERT INTO venues (name, modified_by)
+VALUES ('Pluralsight', 1),
+VALUES ('Udemy', 1),
+VALUES ('Youtube', 2);
+
+UPDATE contests SET venue_id = CASE
+   WHEN id < 3  THEN 1
+   WHEN id >= 3 THEN 2
+END
